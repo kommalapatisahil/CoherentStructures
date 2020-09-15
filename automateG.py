@@ -369,7 +369,7 @@ def DcorrectionV3(Cond, U, V, Umean, props, curr_samp, verbose = False):
             if (b3+b4+1)%2 == 0 : b4+=1
 
             #check bounds
-            if xc-b1<0 or xc+b2+1 >= l1 or yc-b3<0 or yc+b4+1 >= l2: print('out of bounds!'); return p_samp, 0 
+            if xc-b1<0 or xc+b2+1 >= l1 or yc-b3<0 or yc+b4+1 >= l2: print('out of bounds!'); return p_samp, 0, [b1, b2, b3, b4]
             
             u_curr = U[xc-b1:xc+b2+1, yc-b3:yc+b4+1, frame]
             v_curr = V[xc-b1:xc+b2+1, yc-b3:yc+b4+1, frame]
@@ -385,9 +385,9 @@ def DcorrectionV3(Cond, U, V, Umean, props, curr_samp, verbose = False):
             
             F3 = F3check(c_samp, 5000, 98)
             b1, b2, b3, b4 = np.array([b1,b2,b3,b4])+1 
-            if not F3: return c_samp, 1
+            if not F3: return c_samp, 1, [b1, b2, b3, b4]
             if max(b1, b2, b3, b4) <= rth: continue
-            else: print('threshold reached!'); return c_samp, 0
+            else: print('threshold reached!'); return c_samp, 0, [b1, b2, b3, b4]
             
 def thr(S,th):
     S_ = S.copy()

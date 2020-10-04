@@ -388,12 +388,99 @@ def DcorrectionV3(Cond, U, V, Umean, props, curr_samp, verbose = False):
             if not F3: return c_samp, 1, [b1, b2, b3, b4]
             if max(b1, b2, b3, b4) <= rth: continue
             else: print('threshold reached!'); return c_samp, 0, [b1, b2, b3, b4]
-            
+                       
 def thr(S,th):
     S_ = S.copy()
     S_[S<th] = 0
     return S_
 
+def cornerSol(samp, nburn):
+    sol_set = []
+    from scipy.signal import find_peaks 
+
+    s_ = samp.chain[:,nburn:,:].reshape(-1,5).T
+    #print(len(s_))
+    for i in range(len(s_)):
+        #loop over parameters
+
+        pt = s_[i]
+        y,x_ = np.histogram(pt, bins = 100)
+        x = [(x_[i]+x_[i+1])/2 for i in range(len(x_)-1)]
+        
+        gg = find_peaks(y/np.max(y), height = 0.95 )[0] #prom = 95 (apx.)
+        if len(gg) == 0: return -1 #F3 fail check
+        sol_set.append(x[gg[0]])
+    
+    return sol_set
+
+import PODutils 
+
+def DcorrectionV4(Cond, U, V, Umean, props, curr_samp, verbose = False):
+    '''
+    returns -1 if ut of bounds, reaches threshold. 
+    else returns good sampler, bbdims, residue 
+    only care about F3 fails! 
+    takes increments to exact rectangular BB dims; 
+    //instead of increasing radius solely.
+    
+    corrects D-ivergece of peaks
+    I/O: I | best case updated sampler, boolean to indicate success.
+    1: success, 0: fail.
+    
+    
+    '''
+    import PODutils 
+    #props - center, frame, bbdims
+    p_samp = curr_samp
+    c_samp = curr_samp
+    
+    
+    
+    frame = props['frame']
+    cent = props['cent']
+    bbdims  = props['bbdims']
+    
+    rth = int(2*max(bbdims))
+    xc, yc = cent
+    mult = 1.1
+    
+    b1, b2, b3, b4 = bbdims+1
+
+    l1, l2, l3 = U.shape
+    
+    while (True):
+
+            #odd len box
+            if (b1+b2+1)%2 == 0 : b2+=1 
+            if (b3+b4+1)%2 == 0 : b4+=1
+
+            #check bounds
+            if xc-b1<0 or xc+b2+1 >= l1 or yc-b3<0 or yc+b4+1 >= l2: print('out of bounds!'); return -1
+            
+            u_curr = U[xc-b1:xc+b2+1, yc-b3:yc+b4+1, frame]
+            v_curr = V[xc-b1:xc+b2+1, yc-b3:yc+b4+1, frame]
+            u_currn = (u_curr-Umean[xc])/Cond['Uinf'][0][0]
+            
+            print('working on rad:', (b1,b2,b3,b4), ' rth-',rth)
+            x, y = G.get_xy_rect(u_curr.shape[0], u_curr.shape[1])
+            
+            p_samp = c_samp
+            c_samp = G.doMCMC_V4(u_currn, v_curr, x, y)
+
+            if verbose: G.plot_corner(c_samp, 5000)
+            
+            F3 = F3check(c_samp, 5000, 98)
+            b1, b2, b3, b4 = np.array([b1,b2,b3,b4])+1 
+            
+            if not F3: 
+                samp_sol = cornerSol(c_samp, 5000) #sol from sampler 
+                res_ = PODutils.minfuncVecField10r_rect(samp_sol, u_currn, v_curr, x, y)
+                return c_samp,[b1, b2, b3, b4], res_
+            
+            if max(b1, b2, b3, b4) <= rth: continue
+            else: print('threshold reached!'); return -1
+            
+            
 def thrm(S,th):
     S_ = S.copy()
     S_[np.abs(S)<th] = 0

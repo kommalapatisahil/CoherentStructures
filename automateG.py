@@ -415,7 +415,33 @@ def cornerSol(samp, nburn):
 
 import PODutils 
 
-def DcorrectionV4(Cond, U, V, Umean, props, curr_samp, verbose = False):
+def calError(props,f, U, V, Cond, k=1.5):
+    #return the difference using r
+    s, x, y, r, v = props
+    dx = 0.010118516377207676
+    
+    x = int(round(x/dx))
+    y = int(round(y/dx))
+    
+    #print(x,y)
+    r*= k
+    r = int(round(r/dx))
+    #print(r)
+    if y-r>=0 and y+r < len(U) and x-r>=0 and x+r+1 < len(U[0]):
+
+        U1 = U[y-r:y+r+1, x-r:x+r+1,f]
+        V = V[y-r:y+r+1, x-r:x+r+1,f]
+        Un = (U1-Umean[y])/Cond['Uinf']
+
+        x1, y1  = G.get_xy_rect(Un.shape[0], Un.shape[1])
+        m_res = PODutils.minfuncVecField10r_rect(props, Un, V, x1, y1)
+        return m_res
+    else : 
+        #print(y-r>=0 , y+r < len(U) , x-r>=0 , x+r+1 < len(U[0]))
+        return 0  
+    
+
+def DcorrectionV4(Cond, U, V, Umean, props, curr_samp, verbose = False, k1 = 1.5):
     '''
     returns -1 if ut of bounds, reaches threshold. 
     else returns good sampler, bbdims, residue 
@@ -474,12 +500,14 @@ def DcorrectionV4(Cond, U, V, Umean, props, curr_samp, verbose = False):
             
             if not F3: 
                 samp_sol = cornerSol(c_samp, 5000) #sol from sampler 
-                res_ = PODutils.minfuncVecField10r_rect(samp_sol, u_currn, v_curr, x, y)
+                #res_ = PODutils.minfuncVecField10r_rect(samp_sol, u_currn, v_curr, x, y)
+                res_ = calError(samp_sol, frame, U, V, Cond, k = k1)
                 return c_samp,[b1, b2, b3, b4], res_
             
             if max(b1, b2, b3, b4) <= rth: continue
             else: print('threshold reached!'); return -1
-            
+      
+
             
 def thrm(S,th):
     S_ = S.copy()

@@ -415,11 +415,13 @@ def cornerSol(samp, nburn):
 
 import PODutils 
 
-def calError(props,f, U, V, Cond, k=1.5):
+def calError(props,cen, f, U, V, Cond, Umean, k=1.5):
     #return the difference using r
-    s, x, y, r, v = props
-    dx = 0.010118516377207676
+    s, r, x, y, v = props
+    yo, xo = cen
     
+    dx = 0.010118516377207676
+    #print(r)
     x = int(round(x/dx))
     y = int(round(y/dx))
     
@@ -427,13 +429,18 @@ def calError(props,f, U, V, Cond, k=1.5):
     r*= k
     r = int(round(r/dx))
     #print(r)
+    
+    x+= xo
+    y+= yo
+    #print(x, y , r)
     if y-r>=0 and y+r < len(U) and x-r>=0 and x+r+1 < len(U[0]):
 
         U1 = U[y-r:y+r+1, x-r:x+r+1,f]
         V = V[y-r:y+r+1, x-r:x+r+1,f]
         Un = (U1-Umean[y])/Cond['Uinf']
-
+        
         x1, y1  = G.get_xy_rect(Un.shape[0], Un.shape[1])
+        print(x1.shape, Un.shape)
         m_res = PODutils.minfuncVecField10r_rect(props, Un, V, x1, y1)
         return m_res
     else : 
@@ -467,7 +474,7 @@ def DcorrectionV4(Cond, U, V, Umean, props, curr_samp, verbose = False, k1 = 1.5
     bbdims  = props['bbdims']
     
     rth = int(2*max(bbdims))
-    xc, yc = cent
+    yc, xc = cent
     mult = 1.1
     
     b1, b2, b3, b4 = bbdims+1
@@ -483,9 +490,9 @@ def DcorrectionV4(Cond, U, V, Umean, props, curr_samp, verbose = False, k1 = 1.5
             #check bounds
             if xc-b1<0 or xc+b2+1 >= l1 or yc-b3<0 or yc+b4+1 >= l2: print('out of bounds!'); return -1
             
-            u_curr = U[xc-b1:xc+b2+1, yc-b3:yc+b4+1, frame]
-            v_curr = V[xc-b1:xc+b2+1, yc-b3:yc+b4+1, frame]
-            u_currn = (u_curr-Umean[xc])/Cond['Uinf'][0][0]
+            u_curr = U[yc-b1:yc+b2+1, xc-b3:xc+b4+1, frame]
+            v_curr = V[yc-b1:yc+b2+1, xc-b3:xc+b4+1, frame]
+            u_currn = (u_curr-Umean[yc])/Cond['Uinf'][0][0]
             
             print('working on rad:', (b1,b2,b3,b4), ' rth-',rth)
             x, y = G.get_xy_rect(u_curr.shape[0], u_curr.shape[1])
@@ -501,7 +508,7 @@ def DcorrectionV4(Cond, U, V, Umean, props, curr_samp, verbose = False, k1 = 1.5
             if not F3: 
                 samp_sol = cornerSol(c_samp, 5000) #sol from sampler 
                 #res_ = PODutils.minfuncVecField10r_rect(samp_sol, u_currn, v_curr, x, y)
-                res_ = calError(samp_sol, frame, U, V, Cond, k = k1)
+                res_ = calError(samp_sol, cent, frame, U, V, Cond, Umean, k = k1)
                 return c_samp,[b1, b2, b3, b4], res_
             
             if max(b1, b2, b3, b4) <= rth: continue

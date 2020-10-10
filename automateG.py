@@ -488,7 +488,7 @@ def DcorrectionV4(Cond, U, V, Umean, props, curr_samp, verbose = False, k1 = 1.5
             if (b3+b4+1)%2 == 0 : b4+=1
 
             #check bounds
-            if xc-b1<0 or xc+b2+1 >= l1 or yc-b3<0 or yc+b4+1 >= l2: print('out of bounds!'); return -1
+            if xc-b1<0 or xc+b2+1 >= l2 or yc-b3<0 or yc+b4+1 >= l1: print('out of bounds!'); return -1
             
             u_curr = U[yc-b1:yc+b2+1, xc-b3:xc+b4+1, frame]
             v_curr = V[yc-b1:yc+b2+1, xc-b3:xc+b4+1, frame]

@@ -1,14 +1,14 @@
 # CoherentStructures
 Bayesian Optimization to identfy coherent structures in Turbulent boundary layers. 
 
-Here is the related abstract that was sent to APS-DFD 2020.[Abstract](https://github.com/kommalapatisahil/kommalapatisahil.github.io/blob/master/files/342008.pdf)
+Here is the related abstract that was sent to APS-DFD 2020. [Abstract](https://github.com/kommalapatisahil/kommalapatisahil.github.io/blob/master/files/342008.pdf)
 
 Contents of the repository. 
 ## Notebooks.
 
 SMR_W14_automation_heightV5.ipynb - Fully auomated framework that takes the PIV data as an input and produces the cumulative vortex properties convecting as a group in the captured flow. Includes analysis on the results and error estimates. The algorithm gives an ~80% efficiency, in terms of finding a converged global solution. 
 
-version-2 (V2) and version-4 (V4) of the above notebook are older versions, that act as include slightly different approached to the V5 implementations. 
+version-2 (V2) and version-4 (V4) of the above notebook show older implementations.
 
 ## Modules
 

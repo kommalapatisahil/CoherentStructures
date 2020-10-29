@@ -1,7 +1,7 @@
 # CoherentStructures
 Bayesian Optimization to identfy coherent structures in Turbulent boundary layers. 
 
-Here is the related abstract that was sent to APS-DFD 2020. [Abstract](https://github.com/kommalapatisahil/kommalapatisahil.github.io/blob/master/files/342008.pdf)
+Here is the related abstract that was sent to APS-DFD 2020. [Abstract](https://meetings.aps.org/Meeting/DFD20/Session/P18.21)
 
 Contents of the repository. 
 ## Notebooks.

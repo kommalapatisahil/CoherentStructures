@@ -11,7 +11,7 @@ Here is an overview of the approach.
 
 It begins with the wall normal - stream wise velocity components of the PIV frame. The magnitude of these components is visualized below. 
 
-![](https://github.com/kommalapatisahil/CoherentStructures/tree/master/files/pl1.PNG)
+![](https://github.com/kommalapatisahil/CoherentStructures/blob/master/files/pl1.PNG)
 
 Utilizing the velocity components, an objective vortex identification field, T2, is applied on the frame, to identify potential vortex candidates. These candidates appear as blobs/ clusters in the plot below. 
 

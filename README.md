@@ -15,7 +15,7 @@ It begins with the wall normal - stream wise velocity components of the PIV fram
 
 Utilizing the velocity components, an objective vortex identification field, T2, is applied on the frame, to identify potential vortex candidates. These candidates appear as blobs/ clusters in the plot below. 
 
-![](https://github.com/kommalapatisahil/CoherentStructures/tree/master/files/pl2.PNG)
+![](https://github.com/kommalapatisahil/CoherentStructures/blob/master/files/pl2.png)
 
 The contours of uniform velocity are brought back (in black). It should be observed that the vortex candidates appear at the intersection of different uniform velocity contours.
 

@@ -19,31 +19,31 @@ Utilizing the velocity components, an objective vortex identification field, T2,
 
 The contours of uniform velocity are brought back (in black). It should be observed that the vortex candidates appear at the intersection of different uniform velocity contours.
 
-![](https://github.com/kommalapatisahil/CoherentStructures/tree/master/files/pl3.PNG)
+![](https://github.com/kommalapatisahil/CoherentStructures/blob/master/files/pl3.png)
 
 A two dimensional peak prominence threshold is utilized to identify potential vortex candidates. These candidates are shown in red in the plot below. 
 
-![](https://github.com/kommalapatisahil/CoherentStructures/tree/master/files/pl4.PNG)
+![](https://github.com/kommalapatisahil/CoherentStructures/blob/master/files/pl4.png)
 
 
 At this stage an MCMC based matching procedure is executed to extract the properties of all vortices present in this frame. The output of matching for each vortex candidate (shown in red bounding boxes) is a corner plot that contains 5 PDFs as shown below. 
 
-![](https://github.com/kommalapatisahil/CoherentStructures/tree/master/files/mcmc1.PNG)
+![](https://github.com/kommalapatisahil/CoherentStructures/blob/master/files/mcmc1.png)
 
 The peak of each PDF corresponds to the likely value of the vortex property that would optimize the matching procedure. This proceduce is repeated for all other vortices in all the available frames. 
 
 The cummulative results from identification of vortices in 750 non-time resolved PIV measurements of boundary layer flow are visualized using Seaborn's violin plots. For example, here is the KDE plot for the convective velocity of all vortices identified at three different heights using MCMC and Truncated Newtons' minimization. (MIN) 
 
-![](https://github.com/kommalapatisahil/CoherentStructures/tree/master/files/piv5.PNG)
+![](https://github.com/kommalapatisahil/CoherentStructures/blob/master/files/piv5.png)
 
 Here is a brief overview of the vortex matching procedure. 
 
-![](https://github.com/kommalapatisahil/CoherentStructures/tree/master/files/overview1.PNG)
+![](https://github.com/kommalapatisahil/CoherentStructures/blob/master/files/overview1.png)
 
 
 And, here is an overview on how to handle divergence in identification. 
 
-![](https://github.com/kommalapatisahil/CoherentStructures/tree/master/files/own22.PNG)
+![](https://github.com/kommalapatisahil/CoherentStructures/blob/master/files/own22.png)
 
 Contents of the repository. 
 ## Notebooks.
